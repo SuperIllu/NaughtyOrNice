@@ -4,6 +4,7 @@ import os
 import yaml
 from typing import List, Tuple, Optional
 import logging
+import argparse
 
 from base.GameManager import GameManager
 from base.PlayerBase import PlayerBase
@@ -99,7 +100,6 @@ def parse_player_class(yaml_file_path, entry) -> Optional[PlayerEntry]:
     return PlayerEntry(player_class_name, team_name, player_class)
 
 
-
 def get_players():
     yaml_files = find_dedicated_yamls()
     logging.info(f"found registrations: {yaml_files}")
@@ -116,12 +116,13 @@ def get_players():
     return valid_players
 
 
-def get_player_combinations(valid_players):
+def get_player_combinations(valid_players, skip_internal_games):
     player_combinations = list(itertools.combinations(valid_players, 2))
     skip_internal_games = False
     if skip_internal_games:
         def entry_good(entry):
             return entry[0].Team_name != entry[1].Team_name
+
         valid_combinations = [entry for entry in player_combinations if entry_good(entry)]
         print(f"reduces to {valid_combinations}")
     logging.info(f"combinations: {player_combinations}")
@@ -155,16 +156,16 @@ def run_combinations(player_list, player_combinations):
         paired.sort(key=lambda x: -x[1])
         logging.debug(f"total points: {paired}")
 
-        logging.info("-"*50)
+        logging.info("-" * 50)
         for result in paired:
-            logging.info(f"{result[0].ljust(25)}->\t{str(result[1]).rjust(10)}")
-        logging.info("="*50)
+            logging.log(60, f"{result[0].ljust(25)}->\t{str(result[1]).rjust(10)}")
+        logging.info("=" * 50)
     except BaseException as e:
         logging.error("Failed to parse game data")
         raise e
 
 
-def main():
+def main(args):
     if False:
         # just to see the messages
         logging.error("error")
@@ -174,12 +175,48 @@ def main():
 
     valid_players = get_players()
 
-    player_combinations = get_player_combinations(valid_players)
+    player_combinations = get_player_combinations(valid_players, args.skip_internals)
 
     run_combinations(valid_players, player_combinations)
 
 
 
+def parse_arguments():
+    parser = argparse.ArgumentParser(description="Process log level and skip_internals flag.")
+
+    parser.add_argument(
+        "--log-level",
+        type=str,
+        default="INFO",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+        help="Set the logging level (default: INFO)"
+    )
+
+    parser.add_argument(
+        "--skip-internals",
+        action="store_true",
+        default=False,
+        help="Flag to skip internal processing (default: False)"
+    )
+
+    args = parser.parse_args()
+
+    # Set logging level
+    log_level = getattr(logging, args.log_level.upper(), logging.INFO)
+    logging.basicConfig(level=log_level)
+    logging.addLevelName(60, "ALWAYS")
+
+    def log_always(message, *args, **kwargs):
+        logging.log(60, message, *args, **kwargs)
+    logging.Logger.always = log_always
+
+    return args
+
+
 if __name__ == "__main__":
-    logging.getLogger().setLevel(logging.DEBUG)
-    main()
+    args = parse_arguments()
+    main(args)
+
+
+
+
