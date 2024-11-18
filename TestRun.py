@@ -1,3 +1,4 @@
+from CustomPlayers.Player1.NaughtyAfterTwo import NaughtyAfterTwo
 from ExamplePlayers.Alternating import Alternating
 from ExamplePlayers.AlwaysNice import AlwaysNice
 from ExamplePlayers.AlwaysNaughty import AlwaysNaughty
@@ -6,7 +7,7 @@ from ExamplePlayers.CopyCat import CopyCat
 from base.GameManager import GameManager
 
 
-player1Type = AlwaysRandom
+player1Type = NaughtyAfterTwo
 player2Type = Alternating
 
 

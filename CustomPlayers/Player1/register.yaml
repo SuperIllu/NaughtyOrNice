@@ -9,3 +9,5 @@ entries:
     file: "AlwaysNice.py"
   - name: "CopyCat"
     file: "CopyCat.py"
+  - name: "NaughtyAfterTwo"
+    file: "NaughtyAfterTwo.py"

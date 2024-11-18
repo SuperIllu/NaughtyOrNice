@@ -5,7 +5,7 @@ from base.PlayerBase import PlayerBase
 
 class CopyCat(PlayerBase):
     """
-    A player which always plays nice
+    A player which copies the other one's behaviour
     """
 
     def play(self, round_idx: int) -> Play:

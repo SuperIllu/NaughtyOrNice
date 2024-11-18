@@ -4,7 +4,7 @@ from base.GameStates import RoundResult, Play, get_points_for_result
 
 
 class GameManager:
-    def __init__(self, player1, player2, rounds: int = 200):
+    def __init__(self, player1, player2, rounds: int = 100):
         from base.PlayerBase import PlayerBase
         self.Player1: PlayerBase = player1(self)
         self.Player2: PlayerBase = player2(self)

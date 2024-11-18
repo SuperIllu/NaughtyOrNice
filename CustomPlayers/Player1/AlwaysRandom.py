@@ -5,11 +5,11 @@ from base.PlayerBase import PlayerBase
 
 class P1AlwaysRandom(PlayerBase):
     """
-    A player which always plays nice
+    A player which always flips a coin (random)
     """
 
     def on_init(self):
-        self._random = random.Random(234)
+        self._random = random.Random()
 
     def play(self, round_idx: int) -> Play:
         roll = self._random.randint(0, 100)
@@ -18,7 +18,7 @@ class P1AlwaysRandom(PlayerBase):
 
 class P2AlwaysRandom(PlayerBase):
     """
-    A player which always plays nice
+    A player which always flips a coin (pseudo-random)
     """
 
     def on_init(self):
