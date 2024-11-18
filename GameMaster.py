@@ -48,7 +48,7 @@ def find_yaml_files(folder_path: str, file_name: str) -> List[str]:
 
 
 def find_dedicated_yamls():
-    return find_yaml_files(r".\CustomPlayers", "register.yaml")
+    return find_yaml_files("CustomPlayers", "register.yaml")
 
 
 def parse_yaml_file(yaml_file_path):
@@ -77,7 +77,7 @@ def parse_player_class(yaml_file_path, entry) -> Optional[PlayerEntry]:
         path_name = os.path.dirname(yaml_file_path)
         team_name = os.path.split(path_name)[-1]
 
-        file_path = os.path.join(path_name, entry[0])[2:]
+        file_path = os.path.join(path_name, entry[0])
         module_name = os.path.splitext(file_path)[0].replace(os.path.sep, ".")
         logging.debug(f"module name: {module_name} for team {team_name}")
     except BaseException:
