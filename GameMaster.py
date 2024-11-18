@@ -46,8 +46,10 @@ def find_yaml_files(folder_path: str, file_name: str) -> List[str]:
 
     return yaml_files
 
+
 def find_dedicated_yamls():
-    return find_yaml_files(r"..\CustomPlayers", "register.yaml")
+    return find_yaml_files(r".\CustomPlayers", "register.yaml")
+
 
 def parse_yaml_file(yaml_file_path):
     try:
@@ -75,8 +77,8 @@ def parse_player_class(yaml_file_path, entry) -> PlayerEntry | None:
         path_name = os.path.dirname(yaml_file_path)
         team_name = os.path.split(path_name)[-1]
 
-        file_path = os.path.join(path_name, entry[0])
-        module_name = os.path.splitext(file_path[3:])[0].replace(os.path.sep, ".")
+        file_path = os.path.join(path_name, entry[0])[2:]
+        module_name = os.path.splitext(file_path)[0].replace(os.path.sep, ".")
         logging.debug(f"module name: {module_name} for team {team_name}")
     except BaseException:
         logging.error(f"Could not parse {entry} @ {yaml_file_path}")
@@ -95,6 +97,23 @@ def parse_player_class(yaml_file_path, entry) -> PlayerEntry | None:
 
     logging.debug(f"found {player_class_name}|{team_name} -> {player_class}")
     return PlayerEntry(player_class_name, team_name, player_class)
+
+
+
+def get_players():
+    yaml_files = find_dedicated_yamls()
+    logging.info(f"found registrations: {yaml_files}")
+    valid_players = []
+    for yaml_file in yaml_files:
+        player_entries = parse_yaml_file(yaml_file)
+        logging.debug(f"File content: {yaml_file} -> {player_entries}")
+
+        for entry in player_entries:
+            player_info = parse_player_class(yaml_file, entry)
+            if player_info is not None:
+                valid_players.append(player_info)
+    logging.info(f"valid entries: {valid_players}")
+    return valid_players
 
 
 def get_player_combinations(valid_players):
@@ -144,6 +163,7 @@ def run_combinations(player_list, player_combinations):
         logging.error("Failed to parse game data")
         raise e
 
+
 def main():
     if False:
         # just to see the messages
@@ -159,22 +179,7 @@ def main():
     run_combinations(valid_players, player_combinations)
 
 
-def get_players():
-    yaml_files = find_dedicated_yamls()
-    logging.info(f"found registrations: {yaml_files}")
-    valid_players = []
-    for yaml_file in yaml_files:
-        player_entries = parse_yaml_file(yaml_file)
-        logging.debug(f"File content: {yaml_file} -> {player_entries}")
-
-        for entry in player_entries:
-            player_info = parse_player_class(yaml_file, entry)
-            if player_info is not None:
-                valid_players.append(player_info)
-    logging.info(f"valid entries: {valid_players}")
-    return valid_players
-
 
 if __name__ == "__main__":
-    logging.getLogger().setLevel(logging.INFO)
+    logging.getLogger().setLevel(logging.DEBUG)
     main()
