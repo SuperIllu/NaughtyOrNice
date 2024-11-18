@@ -1,0 +1,11 @@
+entries:
+  - name: "P1AlwaysRandom"
+    file: "AlwaysRandom.py"
+  - name: "Alternating"
+    file: "Alternating.py"
+  - name: "AlwaysNaughty"
+    file: "AlwaysNaughty.py"
+  - name: "AlwaysNice"
+    file: "AlwaysNice.py"
+  - name: "CopyCat"
+    file: "CopyCat.py"
