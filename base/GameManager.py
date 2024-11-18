@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 from base.GameStates import RoundResult, Play, get_points_for_result
 
@@ -13,18 +13,18 @@ class GameManager:
         self._last_round = -1
         self._round_results: List[RoundResult] = []
 
-    def play_game(self):
+    def play_game(self) -> None:
         self._round_results.clear()
         for round_idx in range(self.Rounds):
             self.play_next_round(round_idx)
             self._last_round = round_idx
 
-    def play_next_round(self, round_idx: int):
+    def play_next_round(self, round_idx: int) -> None:
         player1_play = self.Player1.play(round_idx)
         player2_play = self.Player2.play(round_idx)
         self._round_results.append(RoundResult(round_idx, self.Player1, self.Player2, player1_play, player2_play))
 
-    def get_last_round(self) -> RoundResult | None:
+    def get_last_round(self) -> Optional[RoundResult]:
         if self._last_round >= 0:
             return self._round_results[self._last_round]
         return None
