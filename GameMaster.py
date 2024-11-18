@@ -2,7 +2,7 @@ import importlib
 import itertools
 import os
 import yaml
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 import logging
 
 from base.GameManager import GameManager
@@ -71,7 +71,7 @@ def parse_yaml_file(yaml_file_path):
         logging.error(f"parsing {yaml_file_path} failed")
 
 
-def parse_player_class(yaml_file_path, entry) -> PlayerEntry | None:
+def parse_player_class(yaml_file_path, entry) -> Optional[PlayerEntry]:
     try:
         logging.debug(f"parsing {entry} in {yaml_file_path}")
         path_name = os.path.dirname(yaml_file_path)
